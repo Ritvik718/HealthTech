@@ -1,0 +1,30 @@
+.navbar {
+  background-color: white;
+  height: 80px; /* Adjust height as needed */
+}
+
+.nav-link {
+  color: #333; /* Adjust text color as needed */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #555; /* Adjust hover color as needed */
+}
+
+@media (min-width: 768px) {
+  .navbar {
+    justify-content: space-between;
+  }
+
+  .nav-links {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-links > * {
+    margin-right: 2rem;
+  }
+}
