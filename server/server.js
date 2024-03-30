@@ -10,6 +10,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 const OpenAI = require("openai");
 
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -36,17 +39,24 @@ app.get("/api", (req, res) => {
   res.send("Hello");
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post("/api/signup", async (req, res) => {
   try {
-    const newUser = new User(req.body);
+    const { firstName, lastName, email, password } = req.body;
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user with the hashed password
+    const newUser = new User({ firstName, lastName, email, password: hashedPassword });
     await newUser.save();
+
     res.status(201).json({ message: "User signed up successfully" });
   } catch (error) {
     console.error("Error signing up:", error);
     res.status(500).json({ error: "An error occurred while signing up" });
   }
 });
-
 app.post("/api/signin", async (req, res) => {
   const { email, password } = req.body;
 
@@ -54,11 +64,23 @@ app.post("/api/signin", async (req, res) => {
     // Find the user in the database
     const existingUser = await User.findOne({ email });
 
-    // Check if the user exists and if the passwords match
-    if (existingUser && existingUser.password === password) {
-      return res.status(200).json({ message: "Logged In" });
+    // Check if the user exists
+    if (!existingUser) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    // Compare the password with the hashed password
+    const passwordMatch = await bcrypt.compare(password, existingUser.password);
+
+    if (passwordMatch) {
+      // Generate JWT token
+      const token = jwt.sign({ userId: existingUser._id }, process.env.SECRET, {
+        expiresIn: "1h", // Token expiration time
+      });
+
+      return res.status(200).json({ message: "Logged In", token });
     } else {
-      return res.status(401).json({ message: "Incorrect email or password" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
   } catch (error) {
     console.error("Error signing in:", error);
@@ -67,6 +89,11 @@ app.post("/api/signin", async (req, res) => {
       .json({ error: "An error occurred while signing in" });
   }
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 // Multer configuration for handling file uploads
 const storage = multer.diskStorage({
