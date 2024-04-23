@@ -1,19 +1,16 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { FaGithub } from "react-icons/fa";
-import { FaGoogle } from "react-icons/fa";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import img1 from "../../assets/back.webp";
-import { Link } from "react-router-dom";
 
 const SignUpPage = () => {
-  const [redirect, setRedirect] = useState(false);
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
   });
+  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -22,15 +19,18 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/signup",
-        formData
-      );
-      console.log(response.data);
+      // Send user data to backend
+      await axios.post("http://localhost:3000/api/signup", formData);
+      setSubmitted(true); // Set the submitted state to true
+      window.location.href = "/userinputs";
     } catch (error) {
       console.error("Error signing up:", error);
     }
   };
+
+  if (submitted) {
+    return <p>Form submitted successfully! Redirecting...</p>;
+  }
 
   return (
     <div
@@ -122,11 +122,12 @@ const SignUpPage = () => {
               onChange={handleChange}
             />
           </div>
-          <Link to="/userinputs">
-            <button className="bg-purple-600 text-white w-full py-2 px-4 mb-4">
-              Continue
-            </button>
-          </Link>
+          <button
+            className="bg-purple-600 text-white w-full py-2 px-4 mb-4"
+            type="submit"
+          >
+            Continue
+          </button>
         </form>
         <div className="text-sm text-gray-600 text-left">
           Already have an account? Login
@@ -137,76 +138,3 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
-
-{
-  /* <div className="flex mb-6">
-          <div className="w-1/2 pr-2">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="firstName"
-            >
-              First Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="firstName"
-              type="text"
-              placeholder="Enter your first name"
-            />
-          </div>
-          <div className="w-1/2 pl-2">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="lastName"
-            >
-              Last Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="lastName"
-              type="text"
-              placeholder="Enter your last name"
-            />
-          </div>
-        </div>
-        <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="email"
-          >
-            Email Address
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="email"
-            type="email"
-            placeholder="Enter your email address"
-          />
-        </div>
-        <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="password"
-            type="password"
-            placeholder="Enter your password"
-          />
-        </div>
-        <button className="bg-purple-600 text-white w-full py-2 px-4 mb-4">
-          Continue
-        </button>
-        <div className="text-sm text-gray-600 text-left">
-          Already have an account? Login
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default SignUpPage; */
-}

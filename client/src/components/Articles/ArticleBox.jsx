@@ -107,7 +107,7 @@ const Carousel = () => {
                 }
                 alt={`Article ${index + 1}`}
                 className="w-full h-64 object-cover rounded-lg"
-                whileHover={{ scale: 1.05, rotate: 5 }}
+                whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
               />
             </a>

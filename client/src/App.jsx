@@ -6,6 +6,7 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Userinputs from "./components/Userinputs/Userinputs";
 import Recommendation from "./components/Recommendation/Recommendation";
+import DiseasePage from "./components/Diseases/Diseases";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/userinputs" element={<Userinputs />} />
           <Route path="/recommendation" element={<Recommendation />} />
+          <Route path="/diseases" element={<DiseasePage />} />
           {/* <Route path="/register" element={<Register />} /> */}
         </Routes>
       </Router>
