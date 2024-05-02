@@ -55,20 +55,22 @@ const Main = () => {
         transition={{ delay: 0.6, duration: 0.5 }}
       >
         <div className="button-row">
-          <motion.button
-            className="button light-green hover:opacity-80"
-            whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
-          >
-            <FaCalendarAlt className="inline-block mr-2" />
-            <div>
-              <span className="font-bold text-lg text-center">
-                Book an Appointment
-              </span>
-              <p className="text-sm text-center">
-                Book an appointment for your next checkup
-              </p>
-            </div>
-          </motion.button>
+          <Link to="/findadoctor">
+            <motion.button
+              className="button light-green hover:opacity-80"
+              whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
+            >
+              <FaCalendarAlt className="inline-block mr-2" />
+              <div>
+                <span className="font-bold text-lg text-center">
+                  Book an Appointment
+                </span>
+                <p className="text-sm text-center">
+                  Book an appointment for your next checkup
+                </p>
+              </div>
+            </motion.button>
+          </Link>
           <motion.button
             className="button light-blue hover:opacity-80"
             whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
@@ -85,7 +87,7 @@ const Main = () => {
             <motion.button
               className="button light-purple hover:opacity-80"
               whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
-              style={{ width: "100%" }} // Adjust width to match other buttons
+              style={{ width: "100%" }}
             >
               <FaMicroscope className="inline-block mr-2" />
               <div>
